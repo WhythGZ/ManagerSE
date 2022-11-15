@@ -55,7 +55,7 @@ def viewUsuario(request):
             elif tipoDeUsuario == '0':
                 cntx = {'error': 'Debe seleccionar un tipo de usuario'}
             elif id < 1:
-                Usuario.objects.create(rut = rut , dv = dv, username = username, first_name = nombre, last_name = apellido, fechaNac = fechaNac, password = password, email = email, direccion = direccion, telefono = telefono, tipoDeUsuario = tipoDeUsuario, is_superuser = is_super, is_staff = is_staff)
+                Usuario.objects.create(rut = rut , dv = dv, username = username, first_name = nombre, last_name = apellido, fechaNac = fechaNac, password = password, email = email, direccion = direccion, telefono = telefono, is_superuser = is_super, is_staff = is_staff)
                 cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
             else:
                 fila = Usuario.objects.get(pk = id)
