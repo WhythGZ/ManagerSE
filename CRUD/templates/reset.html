@@ -1,0 +1,53 @@
+
+
+{# Esto es un comentario #}
+{% extends "index.html" %}
+{# definir contenidos que tendrán cada uno de los bloques #}
+{% block script %} 
+<script src="/static/javascript/reset.js"></script>
+{% endblock %}
+{% block tituloPestana %} 
+    Iniciar Sesión
+{% endblock %}
+{% block tituloPagina %} 
+    <div class="text-center mt-5">
+        <h1>Iniciar Sesión</h1>
+    </div>
+{% endblock %}
+
+{% block mensaje %} 
+{% if mensaje %}
+    <div class="alert alert-success mt-5" role="alert">
+        {{ mensaje }}
+    </div>
+{% elif error %}
+    <div class="alert alert-danger mt-5" role="alert">
+        {{ error }}
+    </div>
+{% endif %}
+{% endblock %}
+{% block contenido %} 
+<br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 off-md-4">
+                <div class="signup-form">
+                    <form action="{%url 'login' %}" method="POST" autocomplete="off" class="mt-5 border p-4 bg-light shadow">
+                        {% csrf_token %}
+                        <h3 class="mb-4">Recuperar contraseña</h3>
+                        <div class="mb-3 col-md-7">
+                            <label for="txtEmail" class="mb-2">Ingrese su correo electronico para restablecer su contraseña<span class="text-danger">*</label></label>
+                            <input type="email" maxlength="75" minlength="13" id="txtEmail" name="txtEmail" placeholder="Ingrese su Email" class="txtEmail form-control">
+                        </div>
+                        <div class="col-md-6">
+                          <button type="button" class="btnEnviar btn btn-outline-dark">Enviar</button>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block listado %} 
+{% endblock %}

@@ -1,0 +1,88 @@
+{# Esto es un comentario #}
+{% extends "index.html" %}
+{# definir contenidos que tendrán cada uno de los bloques #}
+{% block script %} 
+<script src="/static/javascript/marca.js"></script>
+{% endblock %}
+{% block tituloPestana %} 
+    CRUD Marca
+{% endblock %}
+{% block tituloPagina %} 
+    <div class="text-center mt-5">
+        <h1>Registro Marca</h1>
+    </div>
+{% endblock %}
+
+{% block mensaje %} 
+{% if mensaje %}
+    <div class="alert alert-success mt-5" role="alert">
+        {{ mensaje }}
+    </div>
+{% elif error %}
+    <div class="alert alert-danger mt-5" role="alert">
+        {{ error }}
+    </div>
+{% endif %}
+{% endblock %}
+{% block contenido %} 
+<br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 off-md-4">
+                <div class="signup-form">
+                    <form action="{%url 'marca' %}" method="POST" autocomplete="off" class="mt-5 border p-4 bg-light shadow">
+                        {% csrf_token %}
+                        <h3 class="mb-4">Registrar Marca</h3>
+                        <div class="mb-3 col-md-12">
+                            <input type="hidden" name="txtId" value="{{fila.id}}">
+                            <label for="txtNombre">Nombre de la Marca<span class="text-danger">*</span></label>
+                            <input type="text" id="txtNombre" name="txtNombre" placeholder="Ingrese el nombre del producto" class="txtNombre form-control" value="{{ fila.nombreMarca }}">
+                        </div>
+                        <div class="mb-3 col-md-12">
+                            <label class="form-check-label" for="chkActivo">Activo</label>
+                            <input type="checkbox" name="chkActivo" id="chkActivo" class="form-check-input" value="1" {% if fila.activo %}{{ 'checked' }}{% endif %}>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4 mt-3">
+                            <input type="submit" name="btnCreate" class="btnCreate btn btn-outline-success form-control" value="Registrar Marca">
+                          </div>
+                          <div class="col-md-4 mt-3">
+                            <input type="submit" name="btnRead" class="btnRead btn btn-outline-secondary form-control" value="Listar Marcas">
+                          </div>
+                          <div class="col-md-4 mt-3">
+                            <input type="submit" name="btnDelete" class="btnDelete btn btn-outline-danger form-control" value="Eliminar Marca">
+                          </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block listado %} 
+{% if listado %}
+<div class="container">
+    <div class="text-center mt-5">
+        <div class="col-md-12 table-responsive">
+            <table class="table table-light table-striped">
+                <tr class="table-dark">
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Activo</th>
+                    <th>Editar</th>
+                </tr>
+    {% for fila in listado %}
+                <tr>
+                    <td>{{ fila.id }}</td>
+                    <td>{{ fila.nombreMarca }}</td>
+                    <td>{{ fila.activo }}</td>
+                    <td><a href="{% url 'marca' %}/{{ fila.id }}/">Editar</a></td>
+                </tr>
+    {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{%endif%}
+{% endblock %}

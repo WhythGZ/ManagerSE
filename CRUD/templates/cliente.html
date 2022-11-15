@@ -1,0 +1,109 @@
+{# Esto es un comentario #}
+{% extends "index.html" %}
+{# definir contenidos que tendrán cada uno de los bloques #}
+{% block script %} 
+<script src="/static/javascript/usuario.js"></script>
+{% endblock %}
+{% block tituloPestana %} 
+    CRUD Registrarse
+{% endblock %}
+{% block tituloPagina %} 
+    <div class="text-center mt-5">
+        <h1>Registrarse</h1>
+    </div>
+{% endblock %}
+
+{% block mensaje %} 
+{% if mensaje %}
+    <div class="alert alert-success mt-5" role="alert">
+        {{ mensaje }}
+    </div>
+{% elif error %}
+    <div class="alert alert-danger mt-5" role="alert">
+        {{ error }}
+    </div>
+{% endif %}
+{% endblock %}
+{% block contenido %} 
+<br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 off-md-4">
+                <div class="signup-form">
+                    <form action="{%url 'signin' %}" method="POST" autocomplete="off" class="mt-5 border p-4 bg-light shadow">
+                        {% csrf_token %}
+                        <h3 class="mb-4">Registrarse</h3>
+                        <div class="border p-3">
+                            <h5>Información personal</h5>
+                          <div class="row">
+                            <div class="mb-3 col-md-10">
+                              <input type="hidden" name="txtId" value="{{fila.id}}">
+                              <label for="txtRut">Rut<span class="text-danger">*</span></label>
+                              <input type="text" id="txtRut" name="txtRut" maxlength="8" minlength="8" placeholder="Ingrese su Rut" class="txtRut form-control">
+                            </div>
+                            <div class="mb-3 col-md-2">
+                              <label for="txtDV">Digito verif.<span class="text-danger">*</span></label>
+                              <input type="text" id="txtDV" name="txtDV" maxlength="1" minlength="1" placeholder="Ingrese su DV" class="txtDV form-control">
+                            </div>
+                          </div>
+                          <div class="mb-3 col-md-12">
+                            <label for="txtUsername">Nombre de Usuario<span class="text-danger">*</span></label>
+                            <input type="text" id="txtUsername" name="txtUsername" placeholder="Ingrese su Nombre de Usuario" class="txtUsername form-control" value="{{fila.username}}">
+                          </div>
+                          <div class="row">
+                          <div class="mb-3 col-md-6">
+                              <label for="txtNombre">Nombre<span class="text-danger">*</span></label>
+                              <input type="text" id="txtNombre" name="txtNombre" placeholder="Ingrese su Nombre" class="txtNombre form-control">
+                          </div>
+                          <div class="mb-3 col-md-6">
+                              <label for="txtApellido">Apellido<span class="text-danger">*</label>
+                              <input type="text" id="txtApellido" name="txtApellido" placeholder="Ingrese su Apellido" class="txtApellido form-control">
+                          </div>
+                          <div class="mb-3 col-md-12">
+                              <label for="fecNac">Fecha Nacimiento<span class="text-danger">*</span> </label>
+                              <input type="date" name="fecNac" id="fecNac" class="fecNac form-control">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="mb-3 col-md-6">
+                              <label for="txtPassword">Contraseña<span class="text-danger">*</label>
+                              <input type="password" id="txtPassword" maxlength="25" minlength="8" name="txtPassword" placeholder="Ingrese su Contraseña" class="txtPassword form-control">
+                          </div>
+                          <div class="mb-3 col-md-6">
+                              <label for="txtPassword2">Confirmar Contraseña<span class="text-danger">*</label>
+                              <input type="password" id="txtPassword2" maxlength="25" minlength="8" name="txtPassword2" placeholder="Confirme su Contraseña" class="txtPassword2 form-control">
+                          </div>
+                      </div>
+                      </div>
+                      <div class="border mt-2 p-3">
+                        <h5>Contacto</h5>
+                          <div class="mb-3 col-md-12">
+                              <label for="txtEmail">Email<span class="text-danger">*</label>
+                              <input type="email" maxlength="75" minlength="13" id="txtEmail" name="txtEmail" placeholder="Ingrese su Email" class="txtEmail form-control">
+                          </div>
+                          <div class="mb-3 col-md-12">
+                            <label for="txtDireccion">Dirección<span class="text-danger">*</label>
+                            <input type="text" id="txtDireccion" name="txtDireccion" placeholder="Ingrese su Dirección" class="txtDireccion form-control">
+                        </div>
+                          <div class="mb-3 col-md-12">
+                              <label for="txtTel">Teléfono<span class="text-danger">*</label>
+                              <input type="tel" id="txtTel" name="txtTel" maxlength="12" placeholder="Ingrese su Teléfono" class="txtTel form-control">
+                          </div>
+                        <div class="row">
+                          <div class="offset-md-2 col-md-4 mt-3">
+                            <input type="submit" name="btnCreate" class="btnCreate btn btn-outline-success form-control" value="Registrarse">
+                          </div>
+                          <div class="col-md-4 mt-3">
+                            <input type="reset" name="btnDelete" class="btnDelete btn btn-outline-danger form-control" value="Limpiar">
+                          </div>
+                        </div>
+                    </form>
+                </div>
+                <p class="text-center mt-4 text-secondary">¿Ya tiene una cuenta? <a href="{% url 'login' %}">Ingrese aquí</a></p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block listado %} 
+{% endblock %}

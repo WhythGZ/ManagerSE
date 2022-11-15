@@ -1,0 +1,75 @@
+{# Esto es un comentario #}
+{% extends "index.html" %}
+{# definir contenidos que tendrán cada uno de los bloques #}
+{% block script %} 
+<script src="/static/javascript/categorias.js"></script>
+{% endblock %}
+{% block tituloPestana %} 
+    Productos
+{% endblock %}
+{% block tituloPagina %} 
+    <div class="text-center mt-5">
+        <h1>Productos</h1>
+    </div>
+{% endblock %}
+{% block mensaje %} 
+{% if mensaje %}
+    <div class="alert alert-success mt-5" role="alert">
+        {{ mensaje }}
+    </div>
+{% elif error %}
+    <div class="alert alert-danger mt-5" role="alert">
+        {{ error }}
+    </div>
+{% endif %}
+{% endblock %}
+{% block contenido %} 
+<div class="container">
+  <div class="row mt-3">
+    <div class="offset-md-10 col-md-1">
+      <button class="btnCLP btn btn-outline-dark form-control">CLP</button>
+    </div>
+    <div class="col-md-1">
+      <button class="btnUSD btn btn-outline-success form-control">USD</button>
+    </div>
+  </div>
+  <p class="text-secondary mt-4">Encuentra todo tipo de producto para tu jardín: accesorios para limpieza y recolección de hojas, desmalezadores, palas y tijeras y tijerones para poda. Puedes potenciar el crecimiento de tu jardín con nuestros sistemas de riego.</p>
+  {% for categoria in productCategories %}
+  {% if categoria.activo %}
+   <div class="border shadow mt-4 p-4 container col-12">
+    <h3 class="text-dark text-center">{{categoria.nombreCategoria}}</h3>
+    <div class="row"> 
+      {%for producto in products%}
+      {%if categoria.id == producto.categoriaProducto%}
+        <div class="border col-md-3 m-1">
+          <h5 class="text-dark text-center mt-3">{{producto.nombreProducto}}</h5>
+          <h6 class="text-secondary text-center mt-1">{{categoria.nombreCategoria}}</h6>
+          <a href="{% url 'productos' %}/{{ producto.id }}/"><img src="/static/images/imagen-no-encontrada.jpg" class="offset-md-1" width="250" height="250" alt=""></a>
+          <div class="offset-md-1 col-md-10 text-center">
+            <span class="text-break text-dark mt-2">{{producto.descripcionProducto}}</span>
+          </div>
+          {%if user.suscrito%}
+          <h5 class="mt-1 text-secondary text-center PriceDesc">${{producto.precioProducto}}</h5>
+          {%else%}
+          <h5 class="mt-1 text-secondary text-center Price">${{producto.precioProducto}}</h5>
+          {%endif%}
+          <div class="row">
+            <div class="offset-md-4">
+              <a href="{%url 'Add' producto.id%}">
+              <button type="button" class="btn-outline-dark m-3 col-md-2"><svg class="bi" width="22" height="22" fill="currentColor">
+              <use xlink:href="/static/images/bootstrap-icons/bootstrap-icons.svg#cart4"/>
+              </svg></button>
+              </a>
+            </div>
+          </div>
+        </div>
+      {%endif%}
+      {% endfor %}
+    </div>
+  </div>
+  {%endif%}
+  {%endfor%}
+</div>
+{% endblock %}
+{% block listado %}
+{% endblock %}
