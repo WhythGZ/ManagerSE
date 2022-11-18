@@ -5,4 +5,6 @@ urlpatterns = [
     path('marca/<int:id>/', views.viewReadMarca, name="marca"),
     path('usuario', views.viewUsuario, name="usuario"),
     path('usuario/<int:id>/', views.viewReadUsuario, name="usuario"),
+    path('vehiculo', views.viewVehiculo, name="vehiculo"),
+    path('vehiculo/<int:id>/', views.viewReadVehiculo, name="vehiculo"),
     ]

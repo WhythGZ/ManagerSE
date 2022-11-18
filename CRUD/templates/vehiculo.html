@@ -1,0 +1,130 @@
+{# Esto es un comentario #}
+{% extends "index.html" %}
+{# definir contenidos que tendrán cada uno de los bloques #}
+{% block script %} 
+<script src="/static/javascript/vehiculo.js"></script>
+{% endblock %}
+{% block tituloPestana %} 
+    CRUD Vehiculo
+{% endblock %}
+{% block tituloPagina %} 
+    <div class="text-center mt-5">
+        <h1>Registro Vehiculo</h1>
+    </div>
+{% endblock %}
+
+{% block mensaje %} 
+{% if mensaje %}
+    <div class="alert alert-success mt-5" role="alert">
+        {{ mensaje }}
+    </div>
+{% elif error %}
+    <div class="alert alert-danger mt-5" role="alert">
+        {{ error }}
+    </div>
+{% endif %}
+{% endblock %}
+{% block contenido %} 
+<br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 off-md-4">
+                <div class="signup-form">
+                    <form action="{%url 'vehiculo' %}" method="POST" autocomplete="off" class="mt-5 border p-4 bg-light shadow">
+                        {% csrf_token %}
+                        <h3 class="mb-4">Registrar Vehiculo a nombre de {{user.first_name}}</h3>
+                        <input type="text" hidden class="user_id" name="user_id" id="user_id" value="{{user.id}}">
+                        <div class="mb-3 col-md-12">
+                            <input type="hidden" name="txtId" value="{{fila.id}}">
+                            <label for="txtPatente">Patente<span class="text-danger">*</span></label>
+                            <input type="text" id="txtPatente" name="txtPatente" placeholder="Ingrese la Patente del Vehiculo" class="txtPatente form-control" value="{{ fila.patente }}">
+                        </div>
+
+                        <div class="mb-3 col-md-12">
+                            <label for="txtPadron">Padron<span class="text-danger">*</span></label>
+                            <input type="text" id="txtPadron" name="txtPadron" placeholder="Ingrese el Padron del Vehiculo" class="txtPadron form-control" value="{{ fila.padron }}">
+                        </div>
+
+                        <div class="mb-3 col-md-12">
+                        <label for="txtMarca">Marca Vehiculo<span class="text-danger">*</span></label>
+                        <select name="txtMarca" class="form-select txtMarca" id="txtMarca" value="{{fila.txtMarca}}">
+                            <option selected hidden value="0">--Seleccione una Marca--</option>
+                            {% if marcas %}
+                            {% for marca in marcas %}
+                            {% if marca.activo %}
+                            <option value="{{marca.id}}">{{marca.nombreMarca}}</option>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                        </div>
+                        <div class="mb-3 col-md-12">
+                            <label for="txtModelo">Modelo<span class="text-danger">*</span></label>
+                            <input type="text" id="txtModelo" name="txtModelo" placeholder="Ingrese el modelo del Vehiculo" class="txtModelo form-control" value="{{ fila.modelo }}">
+                        </div>
+                        
+                        <div class="mb-3 col-md-12">
+                            <label for="txtAnio">Año<span class="text-danger">*</span></label>
+                            <input type="text" id="txtAnio" name="txtAnio" placeholder="Ingrese el año del Vehiculo" class="txtColor form-control" value="{{ fila.year }}">
+                        </div>
+
+                        <div class="mb-3 col-md-1">
+                            <label for="txtColor">Color<span class="text-danger">*</span></label>
+                            <input type="color" id="txtColor" name="txtColor" placeholder="Ingrese el color del Vehiculo" class="txtColor form-control" value="{{ fila.color }}">
+                        </div>
+
+
+                        <div class="row">
+                          <div class="col-md-4 mt-3">
+                            <input type="submit" name="btnCreate" class="btnCreate btn btn-outline-success form-control" value="Registrar Vehiculo">
+                          </div>
+                          <div class="col-md-4 mt-3">
+                            <input type="submit" name="btnRead" class="btnRead btn btn-outline-secondary form-control" value="Listar Vehiculo">
+                          </div>
+                          <div class="col-md-4 mt-3">
+                            <input type="submit" name="btnDelete" class="btnDelete btn btn-outline-danger form-control" value="Eliminar Vehiculo">
+                          </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block listado %} 
+{% if listado %}
+<div class="container">
+    <div class="text-center mt-5">
+        <div class="col-md-12 table-responsive">
+            <table class="table table-light table-striped">
+                <tr class="table-dark">
+                    <th>Id</th>
+                    <th>Id_Cliente</th>
+                    <th>Patente</th>
+                    <th>Padron</th>
+                    <th>Color</th>
+                    <th>Modelo</th>
+                    <th>Marca</th>
+                    <th>Year</th>
+                    <th>Editar</th>
+                </tr>
+    {% for fila in listado %}
+                <tr>
+                    <td>{{ fila.id }}</td>
+                    <td>{{ fila.idCliente }}</td>
+                    <td>{{ fila.patente }}</td>
+                    <td>{{ fila.padron }}</td>
+                    <td>{{ fila.color }}</td>
+                    <td>{{ fila.modelo }}</td>
+                    <td>{{ fila.marca }}</td>
+                    <td>{{ fila.year }}</td>
+                    <td><a href="{% url 'vehiculo' %}/{{ fila.id }}/">Editar</a></td>
+                </tr>
+    {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{%endif%}
+{% endblock %}

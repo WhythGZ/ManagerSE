@@ -32,3 +32,13 @@ class Marca(models.Model):
 
     def __str__(self):
         return self.nombreMarca
+
+
+class Vehiculo(models.Model):
+    idCliente = models.IntegerField()
+    patente = models.CharField(max_length= 6, unique = True)
+    padron = models.CharField(max_length=17, unique = True)
+    color   = models.CharField(max_length = 15)
+    modelo = models.CharField(max_length = 20)
+    marca = models.TextField(max_length=50)
+    year = models.IntegerField()

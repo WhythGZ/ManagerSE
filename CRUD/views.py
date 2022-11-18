@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, permission_required
-from .models import Marca, Usuario
+from .models import Marca, Usuario, Vehiculo
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render
 
@@ -127,7 +127,7 @@ def viewMarca(request):
             if len(listado) >= 1:
                 cntx = {'listado': listado }
             else:
-                cntx = {'error': 'Aun no existen tipos de usuarios para mostrar'}
+                cntx = {'error': 'Aun no existen marcas para mostrar'}
         elif 'btnDelete' in request.POST:
             try:
                 fila = Marca.objects.get(pk = id)
@@ -197,6 +197,7 @@ def viewCliente(request):
                 fila.telefono = telefono
                 fila.save()
                 cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
+        
     return render(request, 'cliente.html', cntx)
 
 def viewLogin(request):
@@ -210,3 +211,73 @@ def viewReset(request):
 def viewInicio(request):
     cntx = {}
     return render(request, 'inicio.html', cntx)
+
+@login_required
+@permission_required('is_superuser')
+def viewVehiculo(request):
+    cntx = {}
+    if request.method == 'POST':
+        id = int("0" + request.POST["txtId"])
+        idCliente = int(request.POST["user_id"])
+        patente = request.POST["txtPatente"]
+        padron = request.POST["txtPadron"]
+        color = request.POST["txtColor"]
+        modelo = request.POST["txtModelo"]
+        marca = request.POST["txtMarca"]
+        year = request.POST["txtAnio"]
+        if 'btnCreate' in request.POST:
+            if len(patente)<6:
+                cntx = {'error': 'La patente del auto debe tener como minimo 6 caracteres'}
+            elif len(padron)<15:
+                cntx = {'error': 'El padron del vehiculo debe tener como minimo 15 caracteres'}
+            elif len(color) < 0:
+                cntx = {'error': 'El color del auto debe especificarse'}
+            elif len(modelo) < 1:
+                cntx = {'error': 'El modelo del auto debe tener como minimo 10 caracteres'}
+            elif marca == "0":
+                cntx = {'error': 'La marca del vehiculo debe ser especificada'}
+            elif len(year) < 4:
+                cntx = {'error': 'El año del auto debe tener como minimo 4 caracteres'}
+            elif id < 1:
+                Vehiculo.objects.create(idCliente = idCliente, patente = patente , padron = padron, color = color, modelo = modelo, marca= marca, year = year)
+                cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
+            else:
+                fila = Vehiculo.objects.get(pk = id)
+                fila.idCliente = idCliente
+                fila.patente = patente
+                fila.padron = padron
+                fila.color = color
+                fila.modelo = modelo
+                fila.marca = marca
+                fila.year = year
+                fila.save()
+                cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
+        elif 'btnRead' in request.POST:
+            listado = Vehiculo.objects.all()
+            if len(listado) >= 1:
+                cntx = {'listado': listado }
+            else:
+                cntx = {'error': 'Aun no existen vehiculos para mostrar'}
+        elif 'btnDelete' in request.POST:
+            try:
+                fila = Vehiculo.objects.get(pk = id)
+                fila.delete()
+                cntx = {'mensaje': 'Los datos fueron eliminados correctamente'}
+            except:
+                cntx = {'error': 'Debe seleccionar item a eliminar'}
+    marcas = Marca.objects.all()
+    cntx["marcas"] = marcas
+    return render(request, 'vehiculo.html', cntx)
+
+@login_required
+@permission_required('is_superuser')  
+def viewReadVehiculo(request, id):
+    cntx = {}
+    try:
+        fila = Vehiculo.objects.get(pk = id)
+        cntx = {'fila': fila}
+    except:
+        cntx = {'error': 'Item no encontrado'}
+    marcas = Marca.objects.all()
+    cntx["marcas"] = marcas
+    return render(request, 'vehiculo.html', cntx)
