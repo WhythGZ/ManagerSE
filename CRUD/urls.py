@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('marca', views.viewMarca, name="marca"),
     path('marca/<int:id>/', views.viewReadMarca, name="marca"),
@@ -10,4 +12,7 @@ urlpatterns = [
     path('cita', views.viewCita, name="cita"),
     path('cita/<int:id>/<int:clientId>/', views.viewReadCita, name="cita"),
     path('citas', views.viewCitaStaff, name="citas"),
+    path('marcas', views.viewMarcas, name="marcas"),
     ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

@@ -109,23 +109,23 @@ def viewMarca(request):
     if request.method == 'POST':
         id = int("0" + request.POST["txtId"])
         nombreMarca = request.POST["txtNombre"]
-        logo = request.POST["formFile"]
+        imgMarca = request.POST["formFile"]
         activo = False
         if 'chkActivo' in request.POST:
             activo = True
         if 'btnCreate' in request.POST:
             if len(nombreMarca) < 4:
                 cntx = {'error': 'El nombre del tipo de usuario debe tener como minimo 5 caracteres'}
-            elif len(logo)<1:
+            elif len(imgMarca)<1:
                 cntx = {'error': 'Debe seleccionar una imagen'}
             elif id < 1:
-                Marca.objects.create(nombreMarca = nombreMarca, activo = activo, logo = logo)
+                Marca.objects.create(nombreMarca = nombreMarca, activo = activo, imgMarca = imgMarca)
                 cntx = {'mensaje': 'Los datos fueron guardados correctamente'}  
             else:
                 fila = Marca.objects.get(pk = id)
                 fila.nombreMarca = nombreMarca
                 fila.activo = activo
-                fila.logo = logo
+                fila.imgMarca = imgMarca
                 fila.save()
                 cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
         elif 'btnRead' in request.POST:
@@ -349,3 +349,9 @@ def viewCitaStaff(request):
     else:
         cntx = {'error': 'Aun no existen citas para mostrar'}
     return render(request, 'citas.html', cntx)
+
+def viewMarcas(request):
+    cntx = {}
+    marcas = Marca.objects.all()
+    cntx["marcas"] = marcas
+    return render(request, 'marcas.html', cntx)

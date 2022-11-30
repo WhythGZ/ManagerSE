@@ -55,6 +55,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ManagerSE.urls'
 
+MEDIA_URL = '\CRUD\static\images/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "images")
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

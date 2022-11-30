@@ -31,7 +31,7 @@ class Usuario(AbstractUser):
 class Marca(models.Model):
     nombreMarca = models.TextField(max_length=50)
     activo = models.BooleanField()
-    logo = models.FileField(upload_to='static/images/logos/')
+    imgMarca = models.ImageField(upload_to = "marca", null = True)
     def __str__(self):
         return self.nombreMarca
 

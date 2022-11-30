@@ -32,7 +32,7 @@
                     <a class="nav-link" aria-current="page" href="{% url 'inicio' %}">Inicio</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#">Marcas</a>
+                    <a class="nav-link" aria-current="page" href="{% url 'marcas' %}">Marcas</a>
                   </li>
                   {% if not user.is_authenticated %}
                   <li class="nav-item dropdown">
