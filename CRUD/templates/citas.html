@@ -33,19 +33,46 @@
             <table class="table table-light table-striped">
                 <tr class="table-dark">
                     <th>idCita</th>
-                    <th>idCliente</th>
-                    <th>idVehiculo</th>
-                    <th>fechaCita</th>
-                    <th>horaCita</th>
+                    <th>Rut Cliente</th>
+                    <th>Patente Vehiculo</th>
+                    <th>Servicio</th>
+                    <th>Fecha Cita</th>
+                    <th>Hora Cita</th>
+                    <th>Estado</th>
                     <th>Editar</th>
                 </tr>
     {% for fila in listado %}
                 <tr>
                     <td>{{ fila.id }}</td>
-                    <td>{{ fila.idCliente }}</td>
-                    <td>{{ fila.idVehiculo }}</td>
+                    {%for user in users%}
+                    {%if user.id is fila.idCliente%}
+                    <td>{{ user.rut }}-{{user.dv}}</td>
+                    {%endif%}
+                    {%endfor%}
+                    {%for vehicle in vehicles%}
+                    {%if vehicle.id is fila.idVehiculo%}
+                    <td>{{ vehicle.patente }}</td>
+                    {%endif%}
+                    {%endfor%}
+                    {%for service in services%}
+                    {%if service.id is fila.idServicio%}
+                    <td>{{ service.nombreServicio }}</td>
+                    {%endif%}
+                    {%endfor%}
+                    {% if fila.estado == 1 %}
+                    <td>No asignada</td>
+                    <td>No asignada</td>
+                    {% else %}
                     <td>{{ fila.fechaCita }}</td>
                     <td>{{ fila.horaCita }}</td>
+                    {% endif %}
+                    {%if fila.estado == 1%}
+                    <td>En Espera</td>
+                    {%elif fila.estado == 2%}
+                    <td>En Proceso</td>
+                    {%elif fila.estado == 3%}
+                    <td>Listo</td>
+                    {%endif%}
                     <td><a href="{% url 'cita' %}/{{ fila.id }}/{{user.id}}/">Editar</a></td>
                 </tr>
     {% endfor %}

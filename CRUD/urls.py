@@ -13,6 +13,8 @@ urlpatterns = [
     path('cita/<int:id>/<int:clientId>/', views.viewReadCita, name="cita"),
     path('citas', views.viewCitaStaff, name="citas"),
     path('marcas', views.viewMarcas, name="marcas"),
+    path('servicios', views.viewServicios, name="servicios"),
+    path('servicios/<int:id>/', views.viewReadServicios, name="servicios"),
     ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

@@ -48,5 +48,14 @@ class Vehiculo(models.Model):
 class Cita(models.Model):
     idCliente = models.IntegerField()
     idVehiculo = models.IntegerField()
+    idServicio = models.IntegerField()
     fechaCita = models.DateField()
     horaCita = models.TimeField()
+    estado = models.IntegerField()
+
+class Servicios(models.Model):
+    nombreServicio = models.CharField(max_length = 50, unique = True)
+    precioServicio = models.IntegerField()
+    descripcion = models.TextField(max_length = 50)
+    activo = models.BooleanField()
+    tiempo = models.IntegerField()

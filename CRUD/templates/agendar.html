@@ -36,6 +36,7 @@
                             <div class="mb-3 col-md-10">
                               <input type="hidden" name="txtId" value="{{fila.id}}">
                               <input type="hidden" name="txtIdCliente" value="{{user.id}}" >
+                              {% if user.is_staff %}
                                 <div class="mb-3 col-md-12">
                                     <label for="fecCita">Fecha Cita<span class="text-danger">*</span> </label>
                                     <input type="date" name="fecCita" id="fecCita" class="fecCita form-control" value="{{fila.fechaCita}}">
@@ -44,8 +45,16 @@
                                     <label for="horaCita">Hora Cita<span class="text-danger">*</label>
                                     <input type="time" id="horaCita" name="horaCita" class="horaCita form-control" value="{{fila.horaCita}}">
                                 </div>
-                            <div class="border mt-2 p-3">
-                                <h5>Vehiculo</h5>   
+                                <div class="row">
+                                    <label for="cmbEstado">Estado<span class="text-danger">*</span></label>
+                                    <select name="cmbEstado" class="cmbEstado form-select" id="cmbEstado" value="{{ fila.estado }}">
+                                        <option class="cmbVehiculo" hidden value="0">Seleccione un estado</option>
+                                        <option value="1">En espera</option>
+                                        <option value="2">En proceso</option>
+                                        <option value="3">Listo</option>
+                                    </select>
+                                </div>
+                                {%endif%}
                                 <div class="row">
                                     <label for="cmbVehiculo">Vehiculo<span class="text-danger">*</span></label>
                                     <select name="cmbVehiculo" class="cmbVehiculo form-select" id="cmbVehiculo" value="{{ fila.idVehiculo }}">
@@ -54,10 +63,24 @@
                                     {% for fila in userVehicles %}
                                       <option value="{{fila.id}}">{{fila.patente}}, {{fila.modelo}} {{fila.year}}</option>
                                       {% endfor %}
+                                  {% else %}
+                                  <option disabled value="0">No hay vehiculos disponibles</option>
                                   {% endif %}
                                     </select>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <label for="cmbServicio">Servicio<span class="text-danger">*</span></label>
+                                    <select name="cmbServicio" class="cmbServicio form-select" id="cmbServicio" value="{{ fila.idServicio }}">
+                                    <option class="cmbServicio" hidden value="0">Seleccione una Servicio</option>
+                                    {% if services %}
+                                    {% for fila in services %}
+                                      <option value="{{fila.id}}">{{fila.nombreServicio}}</option>
+                                      {% endfor %}
+                                  {% else %}
+                                  <option disabled value="0">No hay servicios disponibles</option>
+                                  {% endif %}
+                                    </select>
+                                </div>
                         <div class="row">
                           <div class="col-md-4 mt-3">
                             <input type="submit" name="btnCreate" class="btnCreate btn btn-outline-success form-control" value="Registrar Cita">
@@ -86,6 +109,7 @@
                     <th>idCita</th>
                     <th>idCliente</th>
                     <th>idVehiculo</th>
+                    <th>idServicio</th>
                     <th>fechaCita</th>
                     <th>horaCita</th>
                     <th>Editar</th>
@@ -95,8 +119,14 @@
                     <td>{{ fila.id }}</td>
                     <td>{{ fila.idCliente }}</td>
                     <td>{{ fila.idVehiculo }}</td>
+                    <td>{{ fila.idServicio }}</td>
+                    {% if fila.estado == 1 %}
+                    <td>No asignada</td>
+                    <td>No asignada</td>
+                    {% else %}
                     <td>{{ fila.fechaCita }}</td>
                     <td>{{ fila.horaCita }}</td>
+                    {% endif %}
                     <td><a href="{% url 'cita' %}/{{ fila.id }}/{{user.id}}/">Editar</a></td>
                 </tr>
     {% endfor %}

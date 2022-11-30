@@ -71,11 +71,12 @@
                   {%elif user.is_staff%}
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Perfil
+                      Administrar
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                      <li><a class="dropdown-item" href="{% url 'citas'  %}" tabindex="-1" aria-disabled="true">Agenda</a></li>
+                      <li><a class="dropdown-item" href="{% url 'citas'  %}" tabindex="-1" aria-disabled="true">Citas</a></li>
                       <li><a class="dropdown-item" href="{% url 'marca'  %}" tabindex="-1" aria-disabled="true">Marcas</a></li>
+                      <li><a class="dropdown-item" href="{% url 'servicios'  %}" tabindex="-1" aria-disabled="true">Servicios</a></li>
                     </ul>
                   </li>
                   {%endif%}

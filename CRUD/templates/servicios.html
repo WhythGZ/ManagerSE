@@ -1,0 +1,112 @@
+{# Esto es un comentario #}
+{% extends "index.html" %}
+{# definir contenidos que tendrán cada uno de los bloques #}
+{% block script %} 
+<!-- <script src="/static/javascript/marca.js"></script> -->
+{% endblock %}
+{% block tituloPestana %} 
+    CRUD Servicios
+{% endblock %}
+{% block tituloPagina %} 
+    <div class="text-center mt-5">
+        <h1>Registro de Servicios</h1>
+    </div>
+{% endblock %}
+
+{% block mensaje %} 
+{% if mensaje %}
+    <div class="alert alert-success mt-5" role="alert">
+        {{ mensaje }}
+    </div>
+{% elif error %}
+    <div class="alert alert-danger mt-5" role="alert">
+        {{ error }}
+    </div>
+{% endif %}
+{% endblock %}
+{% block contenido %} 
+<br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 off-md-4">
+                <div class="signup-form">
+                    <form action="{%url 'servicios' %}" method="POST" autocomplete="off" class="mt-5 border p-4 bg-light shadow">
+                        {% csrf_token %}
+                        <h3 class="mb-4">Registrar Servicios</h3>
+                        <!-- nombre, id -->
+                        <div class="mb-3 col-md-12">
+                            <input type="hidden" name="txtId" value="{{fila.id}}">
+                            <label for="txtNombreServicio">Nombre del servicio<span class="text-danger">*</span></label>
+                            <input type="text" id="txtNombreServicio" name="txtNombreServicio" placeholder="Ingrese el nombre del servicio" class="txtNombreServicio form-control" value="{{ fila.nombreServicio }}">
+                        </div>
+                        <!-- precio -->
+                        <div class="mb-3 col-md-12">
+                            <label for="txtPrecio">Precio<span class="text-danger">*</span></label>
+                            <input type="text" id="txtPrecio" name="txtPrecio" placeholder="Ingrese el precio del servicio" class="txtPrecio form-control" value="{{ fila.precioServicio }}">
+                        </div>
+                        <!-- descripcion -->
+                        <div class="mb-3 col-md-12">
+                            <label for="txtDescripcion">Descripción<span class="text-danger">*</span></label>
+                            <textarea name="txtDescripcion" id="txtDescripcion" class="txtPrecio form-control" placeholder="Ingrese la descripcion del servicio" rows="10" cols="50" value="{{ fila.descripcion }}"> </textarea>
+                        </div>
+                        <!-- tiempo -->
+                        <div class="mb-3 col-md-12">
+                            <label for="txtTiempo">Tiempo<span class="text-danger">*</span></label>
+                            <input type="number" id="txtTiempo" name="txtTiempo" placeholder="Ingrese el tiempo en horas" class="txtTiempo form-control" value="{{ fila.tiempo }}">
+                        </div>
+                        <!-- activo -->
+                        <div class="mb-3 col-md-12">
+                            <label class="form-check-label" for="chkActivo">Activo</label>
+                            <input type="checkbox" name="chkActivo" id="chkActivo" class="form-check-input" value="1" {% if fila.activo %}{{ 'checked' }}{% endif %}>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4 mt-3">
+                            <input type="submit" name="btnCreate" class="btnCreate btn btn-outline-success form-control" value="Registrar Servicio">
+                          </div>
+                          <div class="col-md-4 mt-3">
+                            <input type="submit" name="btnRead" class="btnRead btn btn-outline-secondary form-control" value="Listar Servicios">
+                          </div>
+                          <div class="col-md-4 mt-3">
+                            <input type="submit" name="btnDelete" class="btnDelete btn btn-outline-danger form-control" value="Eliminar Servicio">
+                          </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block listado %} 
+{% if listado %}
+<div class="container">
+    <div class="text-center mt-5">
+        <div class="col-md-12 table-responsive">
+            <table class="table table-light table-striped">
+                <tr class="table-dark">
+                    <th>Id</th>
+                    <th>Nombre Servicio</th>
+                    <th>Precio</th>
+                    <th>Descripción</th>
+                    <th>Tiempo</th>
+                    <th>Activo</th>
+                    <th>Editar</th>
+                </tr>
+    {% for fila in listado %}
+                <tr>
+                    
+                    <td>{{ fila.id }}</td>
+                    <td>{{fila.nombreServicio}}</td>
+                    <td>{{fila.precioServicio}}</td>
+                    <td>{{fila.descripcion}}</td>
+                    <td>{{fila.tiempo}} horas</td>
+                    <td>{{fila.activo}}</td>
+                    <td><a href="{% url 'servicios' %}/{{ fila.id }}/">Editar</a></td>
+                </tr>
+    {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{%endif%}
+{% endblock %}

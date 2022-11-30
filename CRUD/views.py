@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, permission_required
-from .models import Cita, Marca, Usuario, Vehiculo
+from .models import Cita, Marca, Servicios, Usuario, Vehiculo
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
@@ -289,17 +289,24 @@ def viewReadVehiculo(request, id):
 @login_required
 def viewCita(request):
     cntx = {}
+    user = request.user
     if request.method == 'POST':
         id = int("0" + request.POST["txtId"])
         idCliente = request.POST["txtIdCliente"]
         idVehiculo = request.POST["cmbVehiculo"]
-        fechaCita = request.POST["fecCita"]
-        horaCita = request.POST["horaCita"]
+        try:
+            estado = request.POST["cmbEstado"]
+            fechaCita = request.POST["fecCita"]
+            horaCita = request.POST["horaCita"]
+        except:
+            estado = 1
+            fechaCita = "0001-01-01"
+            horaCita = "00:00"
         if 'btnCreate' in request.POST:
             if idVehiculo == 0 :
                 cntx = {'error': 'Debe especificar el vehiculo'}
             elif id < 1:
-                Cita.objects.create(idCliente = idCliente, idVehiculo = idVehiculo, fechaCita = fechaCita, horaCita = horaCita)
+                Cita.objects.create(idCliente = idCliente, idVehiculo = idVehiculo, fechaCita = fechaCita, horaCita = horaCita, estado = estado)
                 cntx = {'mensaje': 'Los datos fueron guardados correctamente'}  
             else:
                 fila = Cita.objects.get(pk = id)
@@ -307,6 +314,7 @@ def viewCita(request):
                 fila.idVehiculo = idVehiculo 
                 fila.fechaCita = fechaCita 
                 fila.horaCita = horaCita
+                fila.estado = estado
                 fila.save()
                 cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
         elif 'btnRead' in request.POST:
@@ -323,8 +331,10 @@ def viewCita(request):
             except:
                 cntx = {'error': 'Debe seleccionar item a eliminar'}
 
-        userVehicles = Vehiculo.objects.filter(idCliente=idCliente)
-        cntx["userVehicles"] = userVehicles
+    userVehicles = Vehiculo.objects.filter(idCliente=user.id)
+    cntx["userVehicles"] = userVehicles
+    services = Servicios.objects.all()
+    cntx["services"] = services
     return render(request, 'agendar.html', cntx)
 
 @login_required
@@ -337,6 +347,8 @@ def viewReadCita(request, id, clientId):
         cntx = {'error': 'Item no encontrado'}
     userVehicles = Vehiculo.objects.filter(idCliente=clientId)
     cntx["userVehicles"] = userVehicles
+    services = Servicios.objects.all()
+    cntx["services"] = services
     return render(request, 'agendar.html', cntx)
 
 @login_required
@@ -348,6 +360,12 @@ def viewCitaStaff(request):
         cntx = {'listado': listado }
     else:
         cntx = {'error': 'Aun no existen citas para mostrar'}
+    services = Servicios.objects.all()
+    cntx["services"] = services
+    vehicles = Vehiculo.objects.all()
+    cntx["vehicles"] = vehicles
+    users = Usuario.objects.all()
+    cntx["users"] = users
     return render(request, 'citas.html', cntx)
 
 def viewMarcas(request):
@@ -355,3 +373,68 @@ def viewMarcas(request):
     marcas = Marca.objects.all()
     cntx["marcas"] = marcas
     return render(request, 'marcas.html', cntx)
+
+@login_required
+@staff_member_required
+def viewServicios(request):
+    cntx = {}
+    if request.method == 'POST':
+        id = int("0" + request.POST["txtId"])
+        nombreServicio = request.POST["txtNombreServicio"]
+        precioServicio = request.POST["txtPrecio"]
+        descripcion = request.POST["txtDescripcion"]
+        tiempo = request.POST["txtTiempo"]
+        activo = False
+        if 'chkActivo' in request.POST:
+            activo = True
+        if 'btnCreate' in request.POST:
+            if len(nombreServicio)<8:
+                cntx = {'error': 'El nombre del servicio debe tener como minimo 8 caracteres'}
+            elif len(precioServicio) == 0:
+                cntx = {'error': 'El precio del servicio debe tener un valor'} 
+            elif len(descripcion) < 10:
+                cntx = {'error': 'La descripcion del servicio debe tener como minimo 10 caracteres'}
+            elif len(tiempo) == 0 :
+                cntx = {'error': 'El tiempo estimado debe tener un valor'}
+            elif id < 1:
+                Servicios.objects.create(nombreServicio = nombreServicio, precioServicio = precioServicio , descripcion = descripcion, tiempo = tiempo, activo = activo)
+                cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
+            else:
+                fila = Servicios.objects.get(pk = id)
+                fila.nombreServicio = nombreServicio
+                fila.precioServicio = precioServicio
+                fila.descripcion = descripcion
+                fila.tiempo = tiempo
+                fila.activo =activo
+                fila.save()
+                cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
+        elif 'btnRead' in request.POST:
+            listado = Servicios.objects.all()
+            if len(listado) >= 1:
+                cntx = {'listado': listado }
+            else:
+                cntx = {'error': 'Aun no existen servicios para mostrar'}
+        elif 'btnDelete' in request.POST:
+            try:
+                fila = Servicios.objects.get(pk = id)
+                fila.delete()
+                cntx = {'mensaje': 'Los datos fueron eliminados correctamente'}
+            except:
+                cntx = {'error': 'Debe seleccionar item a eliminar'}
+    servicios = Servicios.objects.all()
+    cntx["servicios"] = servicios   
+    return render(request, 'servicios.html',cntx)   
+
+
+@login_required
+@staff_member_required
+def viewReadServicios(request,id):
+    cntx = {}
+    try:
+        fila = Servicios.objects.get(pk = id)
+        cntx = {'fila': fila}
+    except:
+        cntx = {'error': 'Item no encontrado'}
+    servicios = Servicios.objects.all()
+    cntx["servicios"] = servicios
+    return render(request, 'servicios.html', cntx)
