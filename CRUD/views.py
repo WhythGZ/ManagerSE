@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, permission_required
-from .models import Marca, Usuario, Vehiculo
+from .models import Cita, Marca, Usuario, Vehiculo
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render
+from django.contrib.admin.views.decorators import staff_member_required
 
 @login_required
 @permission_required('is_superuser')
@@ -14,7 +15,8 @@ def viewUsuario(request):
         dv = request.POST["txtDV"]
         username = request.POST["txtUsername"]
         nombre = request.POST["txtNombre"]
-        apellido = request.POST["txtApellido"]
+        apellido = request.POST["txtApellido"] 
+
         fechaNac = request.POST["fecNac"]
         raw_password = request.POST["txtPassword"]
         password = make_password(raw_password, salt=None, hasher='default')
@@ -42,7 +44,7 @@ def viewUsuario(request):
                 cntx = {'error': 'El nombre del usuario debe tener como minimo 3 caracteres'}
             elif len(apellido) < 3:
                 cntx = {'error': 'El apellido del usuario debe tener como minimo 3 caracteres'}
-            # elif len(fechaNac) < 3:
+            # elif len(fechaNac) < 3: 
             #     cntx = {'error': 'El nombre del usuario debe tener como minimo 3 caracteres'}
             elif len(raw_password) < 8:
                 cntx = {'error': 'La contraseña del usuario debe tener como minimo 8 caracteres'}
@@ -101,25 +103,29 @@ def viewReadUsuario(request, id):
     return render(request, 'usuario.html', cntx)
 
 @login_required
-@permission_required('is_superuser')
+@staff_member_required
 def viewMarca(request):
     cntx = {}
     if request.method == 'POST':
         id = int("0" + request.POST["txtId"])
         nombreMarca = request.POST["txtNombre"]
+        logo = request.POST["formFile"]
         activo = False
         if 'chkActivo' in request.POST:
             activo = True
         if 'btnCreate' in request.POST:
             if len(nombreMarca) < 4:
                 cntx = {'error': 'El nombre del tipo de usuario debe tener como minimo 5 caracteres'}
+            elif len(logo)<1:
+                cntx = {'error': 'Debe seleccionar una imagen'}
             elif id < 1:
-                Marca.objects.create(nombreMarca = nombreMarca, activo = activo)
-                cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
+                Marca.objects.create(nombreMarca = nombreMarca, activo = activo, logo = logo)
+                cntx = {'mensaje': 'Los datos fueron guardados correctamente'}  
             else:
                 fila = Marca.objects.get(pk = id)
                 fila.nombreMarca = nombreMarca
                 fila.activo = activo
+                fila.logo = logo
                 fila.save()
                 cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
         elif 'btnRead' in request.POST:
@@ -138,7 +144,7 @@ def viewMarca(request):
     return render(request, 'marca.html', cntx)
 
 @login_required
-@permission_required('is_superuser')  
+@staff_member_required
 def viewReadMarca(request, id):
     cntx = {}
     try:
@@ -213,7 +219,6 @@ def viewInicio(request):
     return render(request, 'inicio.html', cntx)
 
 @login_required
-@permission_required('is_superuser')
 def viewVehiculo(request):
     cntx = {}
     if request.method == 'POST':
@@ -253,7 +258,7 @@ def viewVehiculo(request):
                 fila.save()
                 cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
         elif 'btnRead' in request.POST:
-            listado = Vehiculo.objects.all()
+            listado = Vehiculo.objects.filter(idCliente=idCliente)
             if len(listado) >= 1:
                 cntx = {'listado': listado }
             else:
@@ -270,7 +275,6 @@ def viewVehiculo(request):
     return render(request, 'vehiculo.html', cntx)
 
 @login_required
-@permission_required('is_superuser')  
 def viewReadVehiculo(request, id):
     cntx = {}
     try:
@@ -281,3 +285,67 @@ def viewReadVehiculo(request, id):
     marcas = Marca.objects.all()
     cntx["marcas"] = marcas
     return render(request, 'vehiculo.html', cntx)
+
+@login_required
+def viewCita(request):
+    cntx = {}
+    if request.method == 'POST':
+        id = int("0" + request.POST["txtId"])
+        idCliente = request.POST["txtIdCliente"]
+        idVehiculo = request.POST["cmbVehiculo"]
+        fechaCita = request.POST["fecCita"]
+        horaCita = request.POST["horaCita"]
+        if 'btnCreate' in request.POST:
+            if idVehiculo == 0 :
+                cntx = {'error': 'Debe especificar el vehiculo'}
+            elif id < 1:
+                Cita.objects.create(idCliente = idCliente, idVehiculo = idVehiculo, fechaCita = fechaCita, horaCita = horaCita)
+                cntx = {'mensaje': 'Los datos fueron guardados correctamente'}  
+            else:
+                fila = Cita.objects.get(pk = id)
+                fila.idCliente = idCliente 
+                fila.idVehiculo = idVehiculo 
+                fila.fechaCita = fechaCita 
+                fila.horaCita = horaCita
+                fila.save()
+                cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
+        elif 'btnRead' in request.POST:
+            listado = Cita.objects.filter(idCliente=idCliente)
+            if len(listado) >= 1:
+                cntx = {'listado': listado }
+            else:
+                cntx = {'error': 'Aun no existen citas para mostrar'}
+        elif 'btnDelete' in request.POST:
+            try:
+                fila = Cita.objects.get(pk = id)
+                fila.delete()
+                cntx = {'mensaje': 'Los datos fueron eliminados correctamente'}
+            except:
+                cntx = {'error': 'Debe seleccionar item a eliminar'}
+
+        userVehicles = Vehiculo.objects.filter(idCliente=idCliente)
+        cntx["userVehicles"] = userVehicles
+    return render(request, 'agendar.html', cntx)
+
+@login_required
+def viewReadCita(request, id, clientId):
+    cntx = {}
+    try:
+        fila = Cita.objects.get(pk = id)
+        cntx = {'fila': fila}
+    except:
+        cntx = {'error': 'Item no encontrado'}
+    userVehicles = Vehiculo.objects.filter(idCliente=clientId)
+    cntx["userVehicles"] = userVehicles
+    return render(request, 'agendar.html', cntx)
+
+@login_required
+@staff_member_required
+def viewCitaStaff(request):
+    cntx = {}
+    listado = Cita.objects.all()
+    if len(listado) >= 1:
+        cntx = {'listado': listado }
+    else:
+        cntx = {'error': 'Aun no existen citas para mostrar'}
+    return render(request, 'citas.html', cntx)

@@ -7,4 +7,7 @@ urlpatterns = [
     path('usuario/<int:id>/', views.viewReadUsuario, name="usuario"),
     path('vehiculo', views.viewVehiculo, name="vehiculo"),
     path('vehiculo/<int:id>/', views.viewReadVehiculo, name="vehiculo"),
+    path('cita', views.viewCita, name="cita"),
+    path('cita/<int:id>/<int:clientId>/', views.viewReadCita, name="cita"),
+    path('citas', views.viewCitaStaff, name="citas"),
     ]

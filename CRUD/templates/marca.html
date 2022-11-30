@@ -35,9 +35,13 @@
                         <h3 class="mb-4">Registrar Marca</h3>
                         <div class="mb-3 col-md-12">
                             <input type="hidden" name="txtId" value="{{fila.id}}">
-                            <label for="txtNombre">Nombre de la Marca<span class="text-danger">*</span></label>
-                            <input type="text" id="txtNombre" name="txtNombre" placeholder="Ingrese el nombre del producto" class="txtNombre form-control" value="{{ fila.nombreMarca }}">
+                            <label for="txtNombre">Nombre de la Marca<span class="text-danger form-label">*</span></label>
+                            <input type="text" id="txtNombre" name="txtNombre" placeholder="Ingrese el nombre de la marca" class="txtNombre form-control" value="{{ fila.nombreMarca }}">
                         </div>
+                        <div class="mb-3 col-md-12">
+                            <label for="formFile" class="form-label">Logo de la Marca<span class="text-danger">*</span></label>
+                            <input class="form-control form-control-sm formFile" id="formFile" name="formFile" type="file" value="{{fila.logo}}">
+                          </div>
                         <div class="mb-3 col-md-12">
                             <label class="form-check-label" for="chkActivo">Activo</label>
                             <input type="checkbox" name="chkActivo" id="chkActivo" class="form-check-input" value="1" {% if fila.activo %}{{ 'checked' }}{% endif %}>
@@ -70,6 +74,7 @@
                     <th>Id</th>
                     <th>Nombre</th>
                     <th>Activo</th>
+                    <th>Logo</th>
                     <th>Editar</th>
                 </tr>
     {% for fila in listado %}
@@ -77,6 +82,7 @@
                     <td>{{ fila.id }}</td>
                     <td>{{ fila.nombreMarca }}</td>
                     <td>{{ fila.activo }}</td>
+                    <td>{{ fila.logo }}</td>
                     <td><a href="{% url 'marca' %}/{{ fila.id }}/">Editar</a></td>
                 </tr>
     {% endfor %}

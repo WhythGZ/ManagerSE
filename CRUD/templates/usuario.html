@@ -155,8 +155,8 @@
                     <td>{{ fila.email }}</td>
                     <td>{{ fila.direccion }}</td>
                     <td>{{ fila.telefono }}</td>
-                    <td>{{ fila.is_superuser }}</td>
                     <td>{{ fila.is_staff }}</td>
+                    <td>{{ fila.is_superuser }}</td>
                     <td><a href="{% url 'usuario' %}/{{ fila.id }}/">Editar</a></td>
                 </tr>
     {% endfor %}

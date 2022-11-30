@@ -3,6 +3,7 @@ $(function()
     $(".btnCreate").click(function()
     {
         let nombre = $(".txtNombre").val();
+        let logo = $(".formFile").val();
         if(!nombre){
             alert("Debe especificar el nombre de la marca");
             $(".txtNombre").focus();
@@ -11,6 +12,11 @@ $(function()
         else if (nombre.length<4){
             alert("El nombre de la marca debe tener como minimo 5 caracteres");
             $(".txtNombre").focus();
+            return false;
+        }
+        else if (logo.length==0){
+            alert("Debe seleccionar la imagen de la marca");
+            $(".formFile").focus();
             return false;
         }
         else{

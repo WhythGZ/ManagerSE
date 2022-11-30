@@ -34,6 +34,7 @@
                   <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="#">Marcas</a>
                   </li>
+                  {% if not user.is_authenticated %}
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Usuario
@@ -43,6 +44,7 @@
                       <li><a class="dropdown-item" href="{% url 'signin' %}">Registrarse</a></li>
                     </ul>
                   </li>
+                  {%endif%}
                   {% if user.is_authenticated %}
                   {% if user.is_superuser %}
                   <li class="nav-item dropdown">
@@ -53,7 +55,27 @@
                       <li><a class="dropdown-item" href="{% url 'usuario'  %}" tabindex="-1" aria-disabled="true">Usuario</a></li>
                       <li><a class="dropdown-item" href="{% url 'marca'  %}" tabindex="-1" aria-disabled="true">Marca</a></li>
                       <li><a class="dropdown-item" href="{% url 'vehiculo'  %}" tabindex="-1" aria-disabled="true">Vehiculo</a></li>
-
+                      <li><a class="dropdown-item" href="{% url 'cita'  %}" tabindex="-1" aria-disabled="true">Cita</a></li>
+                    </ul>
+                  </li>
+                  {% elif not user.is_staff %}
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Perfil
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                      <li><a class="dropdown-item" href="{% url 'vehiculo'  %}" tabindex="-1" aria-disabled="true">Vehiculo</a></li>
+                      <li><a class="dropdown-item" href="{% url 'cita'  %}" tabindex="-1" aria-disabled="true">Agenda</a></li>
+                    </ul>
+                  </li>
+                  {%elif user.is_staff%}
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Perfil
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                      <li><a class="dropdown-item" href="{% url 'citas'  %}" tabindex="-1" aria-disabled="true">Agenda</a></li>
+                      <li><a class="dropdown-item" href="{% url 'marca'  %}" tabindex="-1" aria-disabled="true">Marcas</a></li>
                     </ul>
                   </li>
                   {%endif%}

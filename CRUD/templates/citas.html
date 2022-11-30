@@ -1,0 +1,57 @@
+{# Esto es un comentario #}
+{% extends "index.html" %}
+{# definir contenidos que tendrán cada uno de los bloques #}
+{% block script %} 
+<script src="/static/javascript/usuario.js"></script>
+{% endblock %}
+{% block tituloPestana %} 
+    Citas
+{% endblock %}
+{% block tituloPagina %} 
+    <div class="text-center mt-5">
+        <h1>Citas</h1>
+    </div>
+{% endblock %}
+
+{% block mensaje %} 
+{% if mensaje %}
+    <div class="alert alert-success mt-5" role="alert">
+        {{ mensaje }}
+    </div>
+{% elif error %}
+    <div class="alert alert-danger mt-5" role="alert">
+        {{ error }}
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block listado %} 
+{% if listado %}
+<div class="container">
+    <div class="text-center mt-5">
+        <div class="col-md-12 table-responsive">
+            <table class="table table-light table-striped">
+                <tr class="table-dark">
+                    <th>idCita</th>
+                    <th>idCliente</th>
+                    <th>idVehiculo</th>
+                    <th>fechaCita</th>
+                    <th>horaCita</th>
+                    <th>Editar</th>
+                </tr>
+    {% for fila in listado %}
+                <tr>
+                    <td>{{ fila.id }}</td>
+                    <td>{{ fila.idCliente }}</td>
+                    <td>{{ fila.idVehiculo }}</td>
+                    <td>{{ fila.fechaCita }}</td>
+                    <td>{{ fila.horaCita }}</td>
+                    <td><a href="{% url 'cita' %}/{{ fila.id }}/{{user.id}}/">Editar</a></td>
+                </tr>
+    {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{%endif%}
+{% endblock %}
