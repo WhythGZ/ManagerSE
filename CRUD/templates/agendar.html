@@ -65,7 +65,6 @@
                                       {% endfor %}
                                   {% else %}
                                   <option disabled value="0">No hay vehiculos disponibles</option>
-                                  {% endif %}
                                     </select>
                                 </div>
                                 <div class="row">
@@ -81,6 +80,7 @@
                                   {% endif %}
                                     </select>
                                 </div>
+                                {%endif%}
                         <div class="row">
                           <div class="col-md-4 mt-3">
                             <input type="submit" name="btnCreate" class="btnCreate btn btn-outline-success form-control" value="Registrar Cita">
@@ -127,7 +127,7 @@
                     <td>{{ fila.fechaCita }}</td>
                     <td>{{ fila.horaCita }}</td>
                     {% endif %}
-                    <td><a href="{% url 'cita' %}/{{ fila.id }}/{{user.id}}/">Editar</a></td>
+                    <td><a href="{% url 'cita' %}/{{ fila.id }}/{{fila.idCliente}}/">Editar</a></td>
                 </tr>
     {% endfor %}
             </table>

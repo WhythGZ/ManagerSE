@@ -12,6 +12,7 @@ urlpatterns = [
     path('cita', views.viewCita, name="cita"),
     path('cita/<int:id>/<int:clientId>/', views.viewReadCita, name="cita"),
     path('citas', views.viewCitaStaff, name="citas"),
+    path('citaM/<int:id>/<int:idVehicle>/<int:idService>/', views.viewReadCitaStaff, name='citaM'),
     path('marcas', views.viewMarcas, name="marcas"),
     path('servicios', views.viewServicios, name="servicios"),
     path('servicios/<int:id>/', views.viewReadServicios, name="servicios"),

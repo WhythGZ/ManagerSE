@@ -35,7 +35,6 @@ class Marca(models.Model):
     def __str__(self):
         return self.nombreMarca
 
-
 class Vehiculo(models.Model):
     idCliente = models.IntegerField()
     patente = models.CharField(max_length= 6, unique = True)
@@ -57,5 +56,6 @@ class Servicios(models.Model):
     nombreServicio = models.CharField(max_length = 50, unique = True)
     precioServicio = models.IntegerField()
     descripcion = models.TextField(max_length = 50)
-    activo = models.BooleanField()
     tiempo = models.IntegerField()
+    imgServicio = models.ImageField(upload_to = "servicio", null = True)
+    activo = models.BooleanField()

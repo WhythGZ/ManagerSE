@@ -47,8 +47,12 @@
                         <!-- descripcion -->
                         <div class="mb-3 col-md-12">
                             <label for="txtDescripcion">Descripción<span class="text-danger">*</span></label>
-                            <textarea name="txtDescripcion" id="txtDescripcion" class="txtPrecio form-control" placeholder="Ingrese la descripcion del servicio" rows="10" cols="50" value="{{ fila.descripcion }}"> </textarea>
+                            <textarea name="txtDescripcion" id="txtDescripcion" class="txtPrecio form-control" placeholder="Ingrese la descripcion del servicio" rows="10" cols="50">{{fila.descripcion }}</textarea>
                         </div>
+                        <div class="mb-3 col-md-12">
+                            <label for="formFile" class="form-label">Imagen del Servicio<span class="text-danger">*</span></label>
+                            <input class="form-control form-control-sm formFile" id="formFile" name="formFile" type="file" value="{{fila.imgServicio}}">
+                          </div>
                         <!-- tiempo -->
                         <div class="mb-3 col-md-12">
                             <label for="txtTiempo">Tiempo<span class="text-danger">*</span></label>
@@ -89,17 +93,18 @@
                     <th>Precio</th>
                     <th>Descripción</th>
                     <th>Tiempo</th>
+                    <th>Imagen</th>
                     <th>Activo</th>
                     <th>Editar</th>
                 </tr>
     {% for fila in listado %}
                 <tr>
-                    
                     <td>{{ fila.id }}</td>
                     <td>{{fila.nombreServicio}}</td>
                     <td>{{fila.precioServicio}}</td>
                     <td>{{fila.descripcion}}</td>
                     <td>{{fila.tiempo}} horas</td>
+                    <td>{{fila.imgServicio}}</td>
                     <td>{{fila.activo}}</td>
                     <td><a href="{% url 'servicios' %}/{{ fila.id }}/">Editar</a></td>
                 </tr>

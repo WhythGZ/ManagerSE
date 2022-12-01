@@ -216,6 +216,10 @@ def viewReset(request):
 
 def viewInicio(request):
     cntx = {}
+    services = Servicios.objects.all()
+    brands = Marca.objects.all()
+    cntx["services"] = services
+    cntx["brands"] = brands
     return render(request, 'inicio.html', cntx)
 
 @login_required
@@ -330,7 +334,6 @@ def viewCita(request):
                 cntx = {'mensaje': 'Los datos fueron eliminados correctamente'}
             except:
                 cntx = {'error': 'Debe seleccionar item a eliminar'}
-
     userVehicles = Vehiculo.objects.filter(idCliente=user.id)
     cntx["userVehicles"] = userVehicles
     services = Servicios.objects.all()
@@ -368,6 +371,54 @@ def viewCitaStaff(request):
     cntx["users"] = users
     return render(request, 'citas.html', cntx)
 
+@login_required
+@staff_member_required
+def viewReadCitaStaff(request, id, idVehicle, idService):
+    cntx = {}
+    user = request.user
+    if request.method == 'POST':
+        id = int("0" + request.POST["txtId"])
+        idCliente = request.POST["txtIdCliente"]
+        idVehiculo = idVehicle
+        idServicio = idService
+        estado = request.POST["cmbEstado"]
+        fechaCita = request.POST["fecCita"]
+        horaCita = request.POST["horaCita"]
+        if 'btnCreate' in request.POST:
+            if idVehiculo == 0 :
+                cntx = {'error': 'Debe especificar el vehiculo'}
+            elif id < 1:
+                Cita.objects.create(idCliente = idCliente, idVehiculo = idVehiculo, fechaCita = fechaCita, horaCita = horaCita, estado = estado, idServicio = idServicio)
+                cntx = {'mensaje': 'Los datos fueron guardados correctamente'}  
+            else:
+                fila = Cita.objects.get(pk = id)
+                fila.idCliente = idCliente 
+                fila.idVehiculo = idVehiculo 
+                fila.idServicio = idServicio
+                fila.fechaCita = fechaCita 
+                fila.horaCita = horaCita
+                fila.estado = estado
+                fila.save()
+                cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
+        elif 'btnRead' in request.POST:
+            listado = Cita.objects.filter(idCliente=idCliente)
+            if len(listado) >= 1:
+                cntx = {'listado': listado }
+            else:
+                cntx = {'error': 'Aun no existen citas para mostrar'}
+        elif 'btnDelete' in request.POST:
+            try:
+                fila = Cita.objects.get(pk = id)
+                fila.delete()
+                cntx = {'mensaje': 'Los datos fueron eliminados correctamente'}
+            except:
+                cntx = {'error': 'Debe seleccionar item a eliminar'}
+    userVehicles = Vehiculo.objects.filter(idCliente=user.id)
+    cntx["userVehicles"] = userVehicles
+    services = Servicios.objects.all()
+    cntx["services"] = services
+    return render(request, 'agendar.html', cntx)
+
 def viewMarcas(request):
     cntx = {}
     marcas = Marca.objects.all()
@@ -383,6 +434,7 @@ def viewServicios(request):
         nombreServicio = request.POST["txtNombreServicio"]
         precioServicio = request.POST["txtPrecio"]
         descripcion = request.POST["txtDescripcion"]
+        imgServicio = request.POST["formFile"]
         tiempo = request.POST["txtTiempo"]
         activo = False
         if 'chkActivo' in request.POST:
@@ -397,7 +449,7 @@ def viewServicios(request):
             elif len(tiempo) == 0 :
                 cntx = {'error': 'El tiempo estimado debe tener un valor'}
             elif id < 1:
-                Servicios.objects.create(nombreServicio = nombreServicio, precioServicio = precioServicio , descripcion = descripcion, tiempo = tiempo, activo = activo)
+                Servicios.objects.create(nombreServicio = nombreServicio, precioServicio = precioServicio , descripcion = descripcion, tiempo = tiempo, activo = activo, imgServicio = imgServicio)
                 cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
             else:
                 fila = Servicios.objects.get(pk = id)
@@ -405,6 +457,7 @@ def viewServicios(request):
                 fila.precioServicio = precioServicio
                 fila.descripcion = descripcion
                 fila.tiempo = tiempo
+                fila.imgServicio = imgServicio
                 fila.activo =activo
                 fila.save()
                 cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
