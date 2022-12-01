@@ -298,6 +298,7 @@ def viewCita(request):
         id = int("0" + request.POST["txtId"])
         idCliente = request.POST["txtIdCliente"]
         idVehiculo = request.POST["cmbVehiculo"]
+        idServicio = request.POST["cmbServicio"]
         try:
             estado = request.POST["cmbEstado"]
             fechaCita = request.POST["fecCita"]
@@ -310,7 +311,7 @@ def viewCita(request):
             if idVehiculo == 0 :
                 cntx = {'error': 'Debe especificar el vehiculo'}
             elif id < 1:
-                Cita.objects.create(idCliente = idCliente, idVehiculo = idVehiculo, fechaCita = fechaCita, horaCita = horaCita, estado = estado)
+                Cita.objects.create(idCliente = idCliente, idVehiculo = idVehiculo, fechaCita = fechaCita, horaCita = horaCita, estado = estado, idServicio = idServicio)
                 cntx = {'mensaje': 'Los datos fueron guardados correctamente'}  
             else:
                 fila = Cita.objects.get(pk = id)
@@ -319,6 +320,7 @@ def viewCita(request):
                 fila.fechaCita = fechaCita 
                 fila.horaCita = horaCita
                 fila.estado = estado
+                fila.idServicio = idServicio
                 fila.save()
                 cntx = {'mensaje': 'Los datos fueron guardados correctamente'}
         elif 'btnRead' in request.POST:

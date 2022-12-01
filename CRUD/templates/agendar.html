@@ -33,7 +33,7 @@
                     <form action="{%url 'cita' %}" method="POST" autocomplete="off" class="mt-5 border p-4 bg-light shadow">
                         {% csrf_token %}
                         <h3 class="mb-4">Registrar Cita</h3>
-                            <div class="mb-3 col-md-10">
+                            <div class="mb-3 col-md-12">
                               <input type="hidden" name="txtId" value="{{fila.id}}">
                               <input type="hidden" name="txtIdCliente" value="{{user.id}}" >
                               {% if user.is_staff %}
@@ -60,11 +60,12 @@
                                     <select name="cmbVehiculo" class="cmbVehiculo form-select" id="cmbVehiculo" value="{{ fila.idVehiculo }}">
                                     <option class="cmbVehiculo" hidden value="0">Seleccione una Vehiculo</option>
                                     {% if userVehicles %}
-                                    {% for fila in userVehicles %}
-                                      <option value="{{fila.id}}">{{fila.patente}}, {{fila.modelo}} {{fila.year}}</option>
-                                      {% endfor %}
-                                  {% else %}
+                                        {% for fila in userVehicles %}
+                                        <option value="{{fila.id}}">{{fila.patente}}, {{fila.modelo}} {{fila.year}}</option>
+                                        {% endfor %}
+                                    {% else %}
                                   <option disabled value="0">No hay vehiculos disponibles</option>
+                                  {%endif%}
                                     </select>
                                 </div>
                                 <div class="row">
@@ -72,15 +73,15 @@
                                     <select name="cmbServicio" class="cmbServicio form-select" id="cmbServicio" value="{{ fila.idServicio }}">
                                     <option class="cmbServicio" hidden value="0">Seleccione una Servicio</option>
                                     {% if services %}
-                                    {% for fila in services %}
-                                      <option value="{{fila.id}}">{{fila.nombreServicio}}</option>
-                                      {% endfor %}
-                                  {% else %}
-                                  <option disabled value="0">No hay servicios disponibles</option>
-                                  {% endif %}
+                                        {% for fila in services %}
+                                            <option value="{{fila.id}}">{{fila.nombreServicio}}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option disabled value="0">No hay servicios disponibles</option>
+                                    {% endif %}
                                     </select>
                                 </div>
-                                {%endif%}
+                            </div>
                         <div class="row">
                           <div class="col-md-4 mt-3">
                             <input type="submit" name="btnCreate" class="btnCreate btn btn-outline-success form-control" value="Registrar Cita">
