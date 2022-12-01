@@ -75,7 +75,7 @@
                     {%elif fila.estado == 3%}
                     <td>Listo</td>
                     {%endif%}
-                    <td><a href="{% url 'citaM' fila.id fila.idVehiculo fila.idServicio %}">Administrar</a></td>
+                    <td><a href="{% url 'citaM' fila.id fila.idVehiculo fila.idServicio fila.idCliente %}">Administrar</a></td>
                 </tr>
     {% endfor %}
             </table>

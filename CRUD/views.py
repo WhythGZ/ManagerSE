@@ -340,6 +340,10 @@ def viewCita(request):
     cntx["userVehicles"] = userVehicles
     services = Servicios.objects.all()
     cntx["services"] = services
+    vehicles = Vehiculo.objects.all()
+    cntx["vehicles"] = vehicles
+    users = Usuario.objects.all()
+    cntx["users"] = users
     return render(request, 'agendar.html', cntx)
 
 @login_required
@@ -358,7 +362,7 @@ def viewReadCita(request, id, clientId):
 
 @login_required
 @staff_member_required
-def viewCitaStaff(request):
+def viewCitas(request):
     cntx = {}
     listado = Cita.objects.all()
     if len(listado) >= 1:
@@ -375,14 +379,13 @@ def viewCitaStaff(request):
 
 @login_required
 @staff_member_required
-def viewReadCitaStaff(request, id, idVehicle, idService):
+def viewCitaStaff(request, id, idVehicleP, idServiceP,idClienteP):
     cntx = {}
     user = request.user
+    idCliente = idClienteP
+    idVehiculo = idVehicleP
+    idServicio = idServiceP
     if request.method == 'POST':
-        id = int("0" + request.POST["txtId"])
-        idCliente = request.POST["txtIdCliente"]
-        idVehiculo = idVehicle
-        idServicio = idService
         estado = request.POST["cmbEstado"]
         fechaCita = request.POST["fecCita"]
         horaCita = request.POST["horaCita"]
@@ -394,8 +397,8 @@ def viewReadCitaStaff(request, id, idVehicle, idService):
                 cntx = {'mensaje': 'Los datos fueron guardados correctamente'}  
             else:
                 fila = Cita.objects.get(pk = id)
-                fila.idCliente = idCliente 
-                fila.idVehiculo = idVehiculo 
+                fila.idCliente = idCliente
+                fila.idVehiculo = idVehiculo
                 fila.idServicio = idServicio
                 fila.fechaCita = fechaCita 
                 fila.horaCita = horaCita
